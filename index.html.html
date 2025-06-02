@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAUG 앱 개발 프로젝트 일정표</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2E8B57, #90EE90);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .project-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #2E8B57;
+        }
+        
+        .info-card h3 {
+            color: #2E8B57;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #e9ecef;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: white;
+            color: #2E8B57;
+            border-bottom: 3px solid #2E8B57;
+        }
+        
+        .tab:hover {
+            background: #f8f9fa;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .phase {
+            margin-bottom: 40px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .phase-header {
+            background: linear-gradient(135deg, #2E8B57, #3CB371);
+            color: white;
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .tasks {
+            padding: 20px;
+        }
+        
+        .task {
+            display: grid;
+            grid-template-columns: 1fr 150px 120px 100px 40px;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #90EE90;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .task.completed {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        
+        .task.in-progress {
+            border-left-color: #ffc107;
+            background: #fff3cd;
+        }
+        
+        .task.delayed {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        
+        .task-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .assignee {
+            padding: 8px 12px;
+            background: #2E8B57;
+            color: white;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        
+        .due-date {
+            text-align: center;
+            font-weight: 500;
+            color: #495057;
+        }
+        
+        .status {
+            padding: 6px 12px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .status.todo { background: #e9ecef; color: #6c757d; }
+        .status.progress { background: #fff3cd; color: #856404; }
+        .status.done { background: #d4edda; color: #155724; }
+        .status.delay { background: #f8d7da; color: #721c24; }
+        
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .progress-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2E8B57, #90EE90);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .milestone {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .milestone h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .team-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .team-member {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .member-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            background: #2E8B57;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .edit-mode {
+            background: #e3f2fd !important;
+            border: 2px dashed #2196f3 !important;
+        }
+        
+        .edit-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #2E8B57;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1d5a3a;
+        }
+        
+        .floating-add {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #2E8B57;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-add:hover {
+            transform: scale(1.1);
+            background: #1d5a3a;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content:first-child {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 WAUG 앱 개발 프로젝트</h1>
+            <p>전남 특화 친환경 관광 데이터 기반 탄소절감형 체험 앱</p>
+        </div>
+        
+        <div class="project-info">
+            <div class="info-card">
+                <h3>📅 프로젝트 기간</h3>
+                <p>2024년 6월 1일 ~ 2024년 9월 5일 (14주)</p>
+            </div>
+            <div class="info-card">
+                <h3>🎯 목표</h3>
+                <p>MVP 버전 완성 및 앱스토어 등록</p>
+            </div>
+            <div class="info-card">
+                <h3>👥 팀 구성</h3>
+                <p>기획자/디자이너 1명, 개발자 1명</p>
+            </div>
+            <div class="info-card">
+                <h3>🔧 핵심 기능</h3>
+                <p>그린 루트 플래너, 친환경 체험 큐레이션</p>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">📊 전체 일정</button>
+            <button class="tab" onclick="showTab('team')">👥 팀원별 업무</button>
+            <button class="tab" onclick="showTab('progress')">📈 진행 현황</button>
+        </div>
+        
+        <div class="content">
+            <div id="overview" class="tab-content" style="display: block;">
+                <div class="phase">
+                    <div class="phase-header">
+                        1단계: 준비 및 기획 (6월 1일 ~ 6월 21일) - 3주
+                    </div>
+                    <div class="tasks">
+                        <div class="task" data-phase="1">
+                            <div class="task-name">Figma 학습 및 기본 UI 컴포넌트 제작</div>
+                            <div class="assignee">팀원1</div>
+                            <div class="due-date">6/7</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="1">
+                            <div class="task-name">Flutter/FlutterFlow 학습 및 개발환경 구축</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">6/7</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="1">
+                            <div class="task-name">전남 관광지 데이터 수집 (20-30곳 선별)</div>
+                            <div class="assignee">공통</div>
+                            <div class="due-date">6/14</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="1">
+                            <div class="task-name">앱 전체 UI/UX 디자인 완성</div>
+                            <div class="assignee">팀원1</div>
+                            <div class="due-date">6/21</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="1">
+                            <div class="task-name">TourAPI 연동 방법 학습 및 테스트</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">6/21</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="milestone">
+                    <h4>🎯 1단계 마일스톤</h4>
+                    <p>✅ 디자인 시안 완성<br>✅ 개발 환경 구축<br>✅ 기본 데이터 확보</p>
+                </div>
+                
+                <div class="phase">
+                    <div class="phase-header">
+                        2단계: 핵심 개발 (6월 22일 ~ 8월 16일) - 8주
+                    </div>
+                    <div class="tasks">
+                        <div class="task" data-phase="2">
+                            <div class="task-name">앱 기본 구조 및 네비게이션 구현</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">7/5</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="2">
+                            <div class="task-name">Firebase 데이터베이스 설정 및 연동</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">7/12</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="2">
+                            <div class="task-name">관광지 목록 표시 및 검색 기능</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">7/19</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="2">
+                            <div class="task-name">친환경 점수 시스템 구현</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">7/26</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="2">
+                            <div class="task-name">지도 연동 및 경로 표시</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">8/2</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="2">
+                            <div class="task-name">친환경 숙박/음식점 추천 기능</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">8/9</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="2">
+                            <div class="task-name">UI 디자인 적용 및 사용성 테스트</div>
+                            <div class="assignee">팀원1</div>
+                            <div class="due-date">8/16</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="milestone">
+                    <h4>🎯 2단계 마일스톤</h4>
+                    <p>✅ 핵심 기능 2개 완성<br>✅ 기본 데이터 연동<br>✅ 테스트 가능한 앱 완성</p>
+                </div>
+                
+                <div class="phase">
+                    <div class="phase-header">
+                        3단계: 완성 및 배포 (8월 17일 ~ 9월 5일) - 3주
+                    </div>
+                    <div class="tasks">
+                        <div class="task" data-phase="3">
+                            <div class="task-name">전체 기능 통합 테스트 및 버그 수정</div>
+                            <div class="assignee">공통</div>
+                            <div class="due-date">8/23</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="3">
+                            <div class="task-name">앱 아이콘 및 스플래시 화면 제작</div>
+                            <div class="assignee">팀원1</div>
+                            <div class="due-date">8/26</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="3">
+                            <div class="task-name">앱스토어 등록 자료 준비 (스크린샷, 설명)</div>
+                            <div class="assignee">팀원1</div>
+                            <div class="due-date">8/30</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="3">
+                            <div class="task-name">iOS/Android 빌드 및 최종 테스트</div>
+                            <div class="assignee">팀원2</div>
+                            <div class="due-date">9/2</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                        <div class="task" data-phase="3">
+                            <div class="task-name">앱스토어 등록 및 심사 제출</div>
+                            <div class="assignee">공통</div>
+                            <div class="due-date">9/5</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="team" class="tab-content">
+                <div class="team-section">
+                    <div class="team-member">
+                        <div class="member-header">
+                            <div class="member-avatar">기1</div>
+                            <div>
+                                <h3>June (기획자/디자이너)</h3>
+                                <p>까칠이 WAUG 기획자</p>
+                            </div>
+                        </div>
+                        <h4>주요 업무:</h4>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Figma를 활용한 UI/UX 디자인</li>
+                            <li>사용자 경험 흐름 설계</li>
+                            <li>앱스토어 등록 자료 제작</li>
+                            <li>프로젝트 기획 및 일정 관리</li>
+                        </ul>
+                        <h4>학습 목표:</h4>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Figma 마스터하기</li>
+                            <li>모바일 UI/UX 디자인 원칙</li>
+                            <li>앱스토어 등록 프로세스</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="team-member">
+                        <div class="member-header">
+                            <div class="member-avatar">개2</div>
+                            <div>
+                                <h3>kimshin (개발자)</h3>
+                                <p>비쥬얼 담담? 열린 마음</p>
+                            </div>
+                        </div>
+                        <h4>주요 업무:</h4>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Flutter/FlutterFlow 앱 개발</li>
+                            <li>Firebase 백엔드 구축</li>
+                            <li>API 연동 및 데이터 처리</li>
+                            <li>앱 빌드 및 배포</li>
+                        </ul>
+                        <h4>학습 목표:</h4>
+                        <ul style="margin: 10px 0; padding-left: 20px;">
+                            <li>Flutter 기본기 습득</li>
+                            <li>Firebase 활용법</li>
+                            <li>API 연동 기술</li>
+                            <li>앱 배포 프로세스</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="progress" class="tab-content">
+                <div class="progress-section">
+                    <h3>📈 전체 진행률</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="overall-progress"></div>
+                    </div>
+                    <p id="progress-text">0% 완료 (0/17 작업)</p>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>🔍 단계별 진행률</h3>
+                    <div style="margin: 20px 0;">
+                        <h4>1단계: 준비 및 기획</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="phase1-progress"></div>
+                        </div>
+                        <p id="phase1-text">0% 완료 (0/5 작업)</p>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <h4>2단계: 핵심 개발</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="phase2-progress"></div>
+                        </div>
+                        <p id="phase2-text">0% 완료 (0/7 작업)</p>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <h4>3단계: 완성 및 배포</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="phase3-progress"></div>
+                        </div>
+                        <p id="phase3-text">0% 완료 (0/5 작업)</p>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <h3>⚠️ 주의사항 및 팁</h3>
+                    <ul style="padding-left: 20px; margin: 15px 0;">
+                        <li><strong>매주 금요일</strong> 진도 체크 미팅 진행</li>
+                        <li><strong>막히는 부분</strong>은 커뮤니티에서 도움 요청</li>
+                        <li><strong>완벽함보다 완성</strong>을 목표로 진행</li>
+                        <li><strong>기본 기능</strong>부터 차근차근 구현</li>
+                        <li><strong>백업</strong>을 항상 만들어 두기</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="floating-add" onclick="addNewTask()" title="새 작업 추가">
+        +
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.style.display = 'none');
+            
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName).style.display = 'block';
+            event.target.classList.add('active');
+        }
+        
+        function updateTaskStatus(checkbox) {
+            const task = checkbox.closest('.task');
+            const statusElement = task.querySelector('.status');
+            
+            if (checkbox.checked) {
+                statusElement.textContent = '완료';
+                statusElement.className = 'status done';
+                task.classList.add('completed');
+            } else {
+                statusElement.textContent = '대기';
+                statusElement.className = 'status todo';
+                task.classList.remove('completed');
+            }
+            
+            updateProgress();
+            saveProgress();
+        }
+        
+        function updateProgress() {
+            const allTasks = document.querySelectorAll('.task');
+            const completedTasks = document.querySelectorAll('.task.completed');
+            const overallProgress = (completedTasks.length / allTasks.length) * 100;
+            
+            document.getElementById('overall-progress').style.width = overallProgress + '%';
+            document.getElementById('progress-text').textContent = 
+                `${Math.round(overallProgress)}% 완료 (${completedTasks.length}/${allTasks.length} 작업)`;
+            
+            for (let phase = 1; phase <= 3; phase++) {
+                const phaseTasks = document.querySelectorAll(`[data-phase="${phase}"]`);
+                const phaseCompleted = document.querySelectorAll(`[data-phase="${phase}"].completed`);
+                const phaseProgress = phaseTasks.length > 0 ? (phaseCompleted.length / phaseTasks.length) * 100 : 0;
+                
+                document.getElementById(`phase${phase}-progress`).style.width = phaseProgress + '%';
+                document.getElementById(`phase${phase}-text`).textContent = 
+                    `${Math.round(phaseProgress)}% 완료 (${phaseCompleted.length}/${phaseTasks.length} 작업)`;
+            }
+            
+            showMotivationalMessage();
+        }
+        
+        function addNewTask() {
+            const taskName = prompt('새 작업 이름을 입력하세요:');
+            if (taskName) {
+                const assignee = prompt('담당자를 입력하세요 (팀원1/팀원2/공통):');
+                const dueDate = prompt('마감일을 입력하세요 (예: 7/15):');
+                const phase = prompt('단계를 입력하세요 (1/2/3):');
+                
+                if (assignee && dueDate && phase) {
+                    const taskHTML = `
+                        <div class="task" data-phase="${phase}">
+                            <div class="task-name">${taskName}</div>
+                            <div class="assignee">${assignee}</div>
+                            <div class="due-date">${dueDate}</div>
+                            <div class="status todo">대기</div>
+                            <input type="checkbox" class="checkbox" onchange="updateTaskStatus(this)">
+                        </div>
+                    `;
+                    
+                    const phases = document.querySelectorAll('.phase');
+                    const targetPhase = phases[parseInt(phase) - 1];
+                    const tasksContainer = targetPhase.querySelector('.tasks');
+                    tasksContainer.insertAdjacentHTML('beforeend', taskHTML);
+                    
+                    updateProgress();
+                    alert('새 작업이 추가되었습니다!');
+                }
+            }
+        }
+        
+        function enableEdit(element) {
+            const currentText = element.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentText;
+            input.className = 'edit-input';
+            input.onblur = function() {
+                element.textContent = this.value;
+                element.style.display = 'block';
+                this.remove();
+                saveProgress();
+            };
+            input.onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    this.blur();
+                }
+            };
+            
+            element.style.display = 'none';
+            element.parentNode.insertBefore(input, element.nextSibling);
+            input.focus();
+        }
+        
+        function saveProgress() {
+            const checkboxes = document.querySelectorAll('.checkbox');
+            const progressData = Array.from(checkboxes).map(checkbox => checkbox.checked);
+            localStorage.setItem('waug_progress', JSON.stringify(progressData));
+        }
+        
+        function loadProgress() {
+            const saved = localStorage.getItem('waug_progress');
+            if (saved) {
+                const progressData = JSON.parse(saved);
+                const checkboxes = document.querySelectorAll('.checkbox');
+                checkboxes.forEach((checkbox, index) => {
+                    if (progressData[index]) {
+                        checkbox.checked = true;
+                        updateTaskStatus(checkbox);
+                    }
+                });
+            }
+        }
+        
+        function showMotivationalMessage() {
+            const completedTasks = document.querySelectorAll('.task.completed').length;
+            const totalTasks = document.querySelectorAll('.task').length;
+            const progress = (completedTasks / totalTasks) * 100;
+            
+            let message = '';
+            if (progress === 0) {
+                message = '🚀 프로젝트 시작! 첫 번째 작업을 완료해보세요!';
+            } else if (progress < 25) {
+                message = '💪 좋은 시작이에요! 계속 화이팅!';
+            } else if (progress < 50) {
+                message = '🔥 절반에 가까워지고 있어요! 대단해요!';
+            } else if (progress < 75) {
+                message = '⭐ 3/4 지점 통과! 거의 다 왔어요!';
+            } else if (progress < 100) {
+                message = '🎉 마지막 스퍼트! 조금만 더 힘내세요!';
+            } else {
+                message = '🏆 축하합니다! 모든 작업을 완료했어요!';
+            }
+            
+            const progressSection = document.querySelector('.progress-section');
+            let messageElement = document.getElementById('motivation-message');
+            if (!messageElement) {
+                messageElement = document.createElement('div');
+                messageElement.id = 'motivation-message';
+                messageElement.style.cssText = `
+                    background: linear-gradient(135deg, #FFD700, #FFA500);
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    font-weight: bold;
+                    color: #8B4513;
+                    margin-top: 20px;
+                `;
+                progressSection.appendChild(messageElement);
+            }
+            messageElement.textContent = message;
+        }
+        
+        function exportData() {
+            const tasks = document.querySelectorAll('.task');
+            const data = Array.from(tasks).map(task => ({
+                name: task.querySelector('.task-name').textContent,
+                assignee: task.querySelector('.assignee').textContent,
+                dueDate: task.querySelector('.due-date').textContent,
+                status: task.querySelector('.status').textContent,
+                phase: task.getAttribute('data-phase'),
+                completed: task.classList.contains('completed')
+            }));
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'waug_project_data.json';
+            link.click();
+        }
+        
+        function checkDeadlines() {
+            const today = new Date();
+            const tasks = document.querySelectorAll('.task:not(.completed)');
+            
+            tasks.forEach(task => {
+                const dueDateStr = task.querySelector('.due-date').textContent;
+                const dueDate = new Date('2024/' + dueDateStr);
+                const diffTime = dueDate - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays <= 3 && diffDays > 0) {
+                    task.style.borderLeft = '4px solid #ffc107';
+                } else if (diffDays <= 0) {
+                    task.style.borderLeft = '4px solid #dc3545';
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgress();
+            updateProgress();
+            
+            const checkboxes = document.querySelectorAll('.checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', saveProgress);
+            });
+            
+            const taskNames = document.querySelectorAll('.task-name');
+            taskNames.forEach(taskName => {
+                taskName.addEventListener('dblclick', function() {
+                    enableEdit(this);
+                });
+            });
+            
+            const dueDates = document.querySelectorAll('.due-date');
+            dueDates.forEach(dueDate => {
+                dueDate.addEventListener('dblclick', function() {
+                    enableEdit(this);
+                });
+            });
+            
+            setTimeout(checkDeadlines, 1000);
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                saveProgress();
+                alert('진행상황이 저장되었습니다!');
+            }
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                exportData();
+            }
+        });
+    </script>
+</body>
+</html>
